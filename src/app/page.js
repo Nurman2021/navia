@@ -370,7 +370,7 @@ export default function Home() {
       </main>
 
       {/* Category Buttons di bagian bawah */}
-      <CategoryButtons onCategoryClick={handleCategoryClick} />
+      <CategoryButtons onCategoryClick={handleCategoryClick} mapRef={mapRef} floorData={areaGeoJSON} />
     </div>
   );
 }

@@ -6,7 +6,7 @@ import { ChevronDown, ChevronUp } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import roomNames from '@/app/data/roomNames';
 
-export default function CategoryButtons({ onCategoryClick }) {
+export default function CategoryButtons({ onCategoryClick, mapRef, floorData }) {
   const [isOpen, setIsOpen] = useState(false);
 
   const categories = [
@@ -36,6 +36,40 @@ export default function CategoryButtons({ onCategoryClick }) {
     },
   ];
 
+  // Quick shortcuts - most frequently accessed
+  const shortcuts = [
+    roomNames.emergency,
+    roomNames.toilet,
+    roomNames.mushola,
+    roomNames.apotek,
+    roomNames.kantin,
+    roomNames.lab,
+  ];
+
+  const handleShortcutClick = (shortcut) => {
+    // Trigger search untuk ruangan shortcut
+    if (mapRef?.current?.searchRoom) {
+      mapRef.current.searchRoom(shortcut.name, 'shortcut');
+      console.log('Shortcut clicked:', shortcut.name);
+
+      // Zoom ke lokasi setelah route render
+      setTimeout(() => {
+        if (mapRef?.current?.zoomToSearchedRoom && floorData && floorData.features) {
+          // Cari room yang match dengan nama shortcut
+          const matchedRoom = floorData.features.find((feature) => {
+            const ruangan = feature.properties?.RUANGAN || feature.properties?.ruangan || feature.properties?.name || '';
+            return ruangan.toLowerCase() === shortcut.name.toLowerCase();
+          });
+
+          if (matchedRoom && matchedRoom.geometry) {
+            mapRef.current.zoomToSearchedRoom(matchedRoom.geometry);
+            console.log(`🎯 Zoomed to shortcut location: ${shortcut.name}`);
+          }
+        }
+      }, 100);
+    }
+  };
+
   return (
     <div className={`bg-white shadow-lg border-t ${isOpen ? 'mx-0' : 'mx-4'} rounded-3xl`}>
       {/* Toggle Header */}
@@ -63,6 +97,38 @@ export default function CategoryButtons({ onCategoryClick }) {
         )}
       >
         <div className="px-4 pb-4 pt-2">
+          {/* Quick Shortcuts Section */}
+          <div className="mb-4 pb-4 border-b">
+            <p className="text-xs font-semibold text-gray-600 mb-2">⚡ Akses Cepat</p>
+            <div className="flex gap-2 overflow-x-auto pb-2">
+              {shortcuts.map((shortcut, index) => (
+                <Button
+                  key={index}
+                  onPress={() => handleShortcutClick(shortcut)}
+                  className={cn(
+                    "flex flex-col items-center gap-1 p-2 rounded-lg",
+                    "shrink-0 w-fit",
+                    "hover:bg-blue-50 active:bg-blue-100 transition-colors",
+                    "focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
+                  )}
+                >
+                  <div className="w-10 h-10 flex items-center justify-center bg-blue-50 rounded-lg shadow-sm">
+                    <img
+                      src={shortcut.icon}
+                      alt={shortcut.name}
+                      className="w-6 h-6 object-contain"
+                    />
+                  </div>
+                  <span className="text-xs text-center text-gray-600 font-medium max-w-12 line-clamp-1">
+                    {shortcut.name}
+                  </span>
+                </Button>
+              ))}
+            </div>
+          </div>
+
+          {/* Category Grid */}
+          <p className="text-xs font-semibold text-gray-600 mb-2">📁 Kategori Lengkap</p>
           <div className="grid grid-cols-4 gap-4">
             {categories.map((category) => {
               return (

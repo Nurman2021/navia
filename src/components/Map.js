@@ -270,6 +270,35 @@ function isLocalCoordinateSystem(data) {
   return Math.abs(x) > 360 || Math.abs(y) > 180;
 }
 
+// Fungsi untuk mendapatkan icon path berdasarkan nama ruangan
+function getIconForRoom(roomName) {
+  if (!roomName) return null;
+
+  const name = roomName.toLowerCase();
+
+  // Map nama ruangan ke icon
+  if (name.includes('igd') || name.includes('darurat') || name.includes('emergency')) return '/ruangan-icon/igd.png';
+  if (name.includes('toilet') || name.includes('wc')) return '/ruangan-icon/toilet.png';
+  if (name.includes('mushola') || name.includes('musholla')) return '/ruangan-icon/mushola.png';
+  if (name.includes('apotek') || name.includes('farmasi')) return '/ruangan-icon/apotek.png';
+  if (name.includes('kantin') || name.includes('cafeteria')) return '/ruangan-icon/kantin.png';
+  if (name.includes('lab') || name.includes('laborat')) return '/ruangan-icon/lab.png';
+  if (name.includes('operasi') || name.includes('or')) return '/ruangan-icon/operasi.png';
+  if (name.includes('fisioterapi') || name.includes('fisio')) return '/ruangan-icon/fisioterapi.png';
+  if (name.includes('rawat inap') || name.includes('inpatient')) return '/ruangan-icon/rawat_inap.png';
+  if (name.includes('perawatan') || name.includes('care')) return '/ruangan-icon/perawatan.png';
+  if (name.includes('hcu') || name.includes('high care')) return '/ruangan-icon/hcu.png';
+  if (name.includes('poli anak') || name.includes('pediatri')) return '/ruangan-icon/poli_anak.png';
+  if (name.includes('poli obgin') || name.includes('obgyn') || name.includes('kandungan')) return '/ruangan-icon/poli_obryin.png';
+  if (name.includes('poli umum') || name.includes('general')) return '/ruangan-icon/poli_umum.png';
+  if (name.includes('bayi') || name.includes('nicu') || name.includes('baby')) return '/ruangan-icon/bayi.png';
+  if (name.includes('bersalin') || name.includes('delivery') || name.includes('maternity')) return '/ruangan-icon/bersalin.png';
+  if (name.includes('menyusui') || name.includes('nursing')) return '/ruangan-icon/menyusui.png';
+  if (name.includes('bank darah') || name.includes('blood bank')) return '/ruangan-icon/bank_darah.png';
+
+  return null;
+}
+
 export default forwardRef(function Map({ selectedCategory, currentFloor = 'westport-house-floor-gf', qrPosition, centerTrigger, onPositionUpdate, routeDestination, isNavigating, onAreaDataLoaded, onPathsDataLoaded, routeWaypoints }, ref) {
   const [isMounted, setIsMounted] = useState(false);
   const [floorData, setFloorData] = useState(null);
@@ -695,7 +724,7 @@ export default forwardRef(function Map({ selectedCategory, currentFloor = 'westp
 
   // Westport House location (Dundee, Scotland) - untuk koordinat GPS
   const defaultCenter = [56.45992, -2.97800];
-  const defaultZoom = 19;
+  const defaultZoom = 20;
 
   // Default center untuk koordinat lokal (akan di-override oleh fitBounds)
   const localCenter = [3700, 5500];
@@ -818,7 +847,7 @@ export default forwardRef(function Map({ selectedCategory, currentFloor = 'westp
         zoom={mapZoom}
         crs={mapCRS}
         style={{ height: '100%', width: '100%' }}
-        minZoom={useLocalCRS ? -5 : 17}
+        minZoom={useLocalCRS ? -10 : 20}
         maxZoom={useLocalCRS ? 5 : 22}
       >
         {/* Layer 1 (BAWAH): Area ruangan dengan fill warna */}
@@ -833,6 +862,71 @@ export default forwardRef(function Map({ selectedCategory, currentFloor = 'westp
             />
             {/* Fit bounds ke area data (baik dari file terpisah maupun floor data) */}
             <FitBounds data={areaData} isLocal={useLocalCRS} />
+
+            {/* Layer 1.5 (TENGAH): Icon markers untuk setiap ruangan */}
+            {areaData.features && areaData.features.map((feature, idx) => {
+              if (!feature.geometry || !feature.properties) return null;
+
+              const roomName = feature.properties.RUANGAN || feature.properties.ruangan || feature.properties.name || '';
+              if (!roomName) return null;
+
+              const iconPath = getIconForRoom(roomName);
+              if (!iconPath) return null;
+
+              // Hitung centroid dari geometry
+              let centroid = null;
+              try {
+                if (feature.geometry.type === 'Polygon') {
+                  const coords = feature.geometry.coordinates[0];
+                  const xs = coords.map(c => c[0]);
+                  const ys = coords.map(c => c[1]);
+                  centroid = [
+                    (Math.min(...ys) + Math.max(...ys)) / 2,
+                    (Math.min(...xs) + Math.max(...xs)) / 2
+                  ];
+                } else if (feature.geometry.type === 'MultiPolygon') {
+                  const coords = feature.geometry.coordinates[0][0];
+                  const xs = coords.map(c => c[0]);
+                  const ys = coords.map(c => c[1]);
+                  centroid = [
+                    (Math.min(...ys) + Math.max(...ys)) / 2,
+                    (Math.min(...xs) + Math.max(...xs)) / 2
+                  ];
+                }
+              } catch (error) {
+                console.error('Error calculating centroid:', error);
+              }
+
+              if (!centroid) return null;
+
+              // Create custom div icon with image
+              const roomIcon = L.divIcon({
+                className: 'room-icon-marker',
+                html: `
+                  <div style="
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    width: 40px;
+                    height: 40px;
+                    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.25));
+                  ">
+                    <img src="${iconPath}" alt="${roomName}" style="width: 32px; height: 32px; object-fit: contain;" />
+                  </div>
+                `,
+                iconSize: [40, 40],
+                iconAnchor: [20, 20],
+                popupAnchor: [0, -20],
+              });
+
+              return (
+                <Marker key={`room-icon-${idx}`} position={centroid} icon={roomIcon}>
+                  <Popup>
+                    <div className="text-sm font-semibold">{roomName}</div>
+                  </Popup>
+                </Marker>
+              );
+            })}
           </>
         )}
 
