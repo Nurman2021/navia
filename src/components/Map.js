@@ -827,10 +827,6 @@ export default forwardRef(function Map({ selectedCategory, currentFloor = 'westp
     };
   };
 
-  // Fungsi untuk menambahkan popup pada feature
-  const onEachFeature = (feature, layer) => {
-    // Tidak pakai popup agar tidak menghalangi klik deteksi posisi
-  };
 
   // coordsToLatLng untuk koordinat lokal
   const coordsToLatLng = useLocalCRS
@@ -857,7 +853,6 @@ export default forwardRef(function Map({ selectedCategory, currentFloor = 'westp
               key={`area-${currentFloor}-${useLocalCRS}`}
               data={areaData}
               style={getAreaStyle}
-              onEachFeature={onEachFeature}
               coordsToLatLng={coordsToLatLng}
             />
             {/* Fit bounds ke area data (baik dari file terpisah maupun floor data) */}
@@ -930,20 +925,16 @@ export default forwardRef(function Map({ selectedCategory, currentFloor = 'westp
           </>
         )}
 
-        {/* Layer 2 (ATAS): Denah dinding, pintu, jendela */}
         {/* HANYA render floorData jika ada file area terpisah (jangan double render) */}
         {floorData && hasSeperateAreaFile && (
           <GeoJSON
             key={`floor-${currentFloor}-${useLocalCRS}`}
             data={floorData}
             style={getFeatureStyle}
-            onEachFeature={onEachFeature}
             coordsToLatLng={coordsToLatLng}
           />
         )}
 
-        {/* Navigation graph (hidden - data digunakan untuk routing, tidak ditampilkan) */}
-        {/* pathsData di-load untuk dikirim ke parent via onPathsDataLoaded */}
 
         {/* Deteksi posisi user saat klik peta */}
         <UserLocationDetector

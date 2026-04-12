@@ -1,0 +1,8 @@
+{
+"type": "FeatureCollection",
+"name": "lantai-4-5-line",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:EPSG::23839" } },
+"features": [
+{ "type": "Feature", "properties": { "id": 1, "RUANGAN": "KORIDOR" }, "geometry": { "type": "MultiLineString", "coordinates": [ [ [ 2060.957789401195441, 4030.945197858230131 ], [ 2067.193345604725437, 2639.679003015818125 ], [ 2041.188484403444136, 1486.733507495348704 ], [ 2041.975602239749378, 1479.790543466102235 ], [ 2058.527709539885109, 473.924177708521142 ] ] ] } }
+]
+}
