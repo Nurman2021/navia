@@ -356,9 +356,6 @@ export default function Home() {
             className="bg-white px-4 py-2 rounded-full shadow-lg hover:shadow-xl transition-shadow flex items-center gap-2"
             aria-label="Floor Selector"
           >
-            {/* <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M12 2L4 7v10h16V7l-8-5z" />
-            </svg> */}
             <span className="text-sm font-medium">{currentFloorData?.name || 'Select Floor'}</span>
             <ChevronDown
               className={`w-4 h-4 transition-transform ${showFloorSelector ? 'rotate-180' : ''}`}

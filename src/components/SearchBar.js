@@ -1,12 +1,10 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Button } from 'react-aria-components';
 import { Search, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { keterangan_ruangan } from '@/app/data/room-name';
 
-export default function SearchBar({ mapRef, onMenuClick, onSearchSelect, floorData }) {
+export default function SearchBar({ mapRef, onSearchSelect, floorData }) {
   const [searchText, setSearchText] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const [showResults, setShowResults] = useState(false);
