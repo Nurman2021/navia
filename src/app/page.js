@@ -190,8 +190,8 @@ export default function Home() {
     { id: 'lantai-1-area', name: 'Emergency & Penunjang Medis', label: 'L1' },
     { id: 'lantai-2-area', name: 'Rawat Jalan dan Penunjang Klinis', label: 'L2' },
     { id: 'lantai-3-area', name: 'Rawat Inap Pemulihan', label: 'L3' },
-    { id: 'lantai-4-5-area', name: 'Rawat Inap Lanjutan', label: 'L4' },
-    { id: 'lantai-4-5-area', name: 'Rawat Inap Lanjutan', label: 'L5' },
+    { id: 'lantai-4-area', name: 'Rawat Inap Lanjutan', label: 'L4' },
+    { id: 'lantai-5-area', name: 'Rawat Inap Lanjutan', label: 'L5' },
     { id: 'lantai-6-area', name: 'Administrasi Dan K. Konstitusional', label: 'L6' },
   ];
 
@@ -319,7 +319,6 @@ export default function Home() {
           />
         )}
 
-        {/* Navigation Panel (bottom sheet saat navigasi aktif) */}
         {isNavigating && (
           <NavigationPanel
             fromName={userPosition?.room?.name}
@@ -329,9 +328,7 @@ export default function Home() {
           />
         )}
 
-        {/* Floor Selector */}
         <div className="absolute bottom-4 left-4 z-999">
-          {/* Floor Dropdown */}
           {showFloorSelector && (
             <div className="mb-2 bg-white rounded-lg shadow-lg overflow-hidden max-w-xl">
               {floors.map((floor) => (
@@ -356,7 +353,7 @@ export default function Home() {
             className="bg-white px-4 py-2 rounded-full shadow-lg hover:shadow-xl transition-shadow flex items-center gap-2"
             aria-label="Floor Selector"
           >
-            <span className="text-sm font-medium">{currentFloorData?.name || 'Select Floor'}</span>
+            <span className="text-sm font-medium">{currentFloorData?.label || 'Select Floor'}</span>
             <ChevronDown
               className={`w-4 h-4 transition-transform ${showFloorSelector ? 'rotate-180' : ''}`}
             />

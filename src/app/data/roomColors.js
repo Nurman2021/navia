@@ -1,17 +1,15 @@
 // Simple color mapping for room name normalization
 const roomColors = {
   // Emergency & Urgent
-  igd: '#f09696',           // Salmon Soft
-  igm: '#f0b27a',           // Warm Orange
-  igm_anak: '#ffbebe',      // Light Coral
-  igm_triase: '#aa6e78',    // Muted Maroon
+  IGD: '#f09696',           // Salmon Soft
+  IGM: '#f0b27a',           // Warm Orange
+  IGM_ANAK: '#ffbebe',      // Light Coral
+  IGM_TRIASE: '#aa6e78',    // Muted Maroon
 
   // Inpatient Services
-  rawat_inap: '#fff5c8',    // Light Cream
-  r_rawat_inap: '#fff5c8',  // Light Cream (Lantai 4)
-  perawatan: '#fff0aa',     // Soft Yellow
-  hcu: '#fff5c8',           // Light Cream
-  r_perawatan: '#fff0aa',   // Soft Yellow
+  'R. RAWAT INAP': '#fff5c8',    // Light Cream
+  'R. PERAWATAN': '#fff0aa',   // Soft Yellow
+  HCU: '#fff5c8',           // Light Cream
 
   // Operations & Procedures
   operasi: '#e18c8c',       // Soft Red
@@ -26,7 +24,6 @@ const roomColors = {
   kantin: '#f5dc82',        // Muted Yellow
   toilet: '#c8ebb8',        // Light Green
   mushola: '#b9d7b9',       // Soft Green Sage
-  mushollah: '#b9d7b9',     // Soft Green Sage
   masjid: '#b9d7b9',        // Soft Green Sage
   lobby: '#e6e6e6',         // Light Grey
   koridor: '#f0f0f0',       // Very Light Grey (Lantai 4)
@@ -105,8 +102,7 @@ export const hospitalRoomStyles = {
   wc: { color: '#c8ebb8', weight: 2, fillColor: '#c8ebb8', fillOpacity: 0.6 },
 
   // INST DAMKAR - DUSTY RED (210,130,130)
-  'inst. damkar': { color: '#d28282', weight: 2, fillColor: '#d28282', fillOpacity: 0.6 },
-  'inst damkar': { color: '#d28282', weight: 2, fillColor: '#d28282', fillOpacity: 0.6 },
+  'INST. DAMKAR': { color: '#d28282', weight: 2, fillColor: '#d28282', fillOpacity: 0.6 },
 
   // R GIZI - LIME PASTEL (210,230,160)
   'R. GIZI': { color: '#d2e6a0', weight: 2, fillColor: '#d2e6a0', fillOpacity: 0.6 },
@@ -126,14 +122,13 @@ export const hospitalRoomStyles = {
   operasi: { color: '#e18c8c', weight: 2, fillColor: '#e18c8c', fillOpacity: 0.6 },
   r_oprasi: { color: '#e18c8c', weight: 2, fillColor: '#e18c8c', fillOpacity: 0.6 },
   'R. OPRASI': { color: '#e18c8c', weight: 2, fillColor: '#e18c8c', fillOpacity: 0.6 },
-  'R.OPRASI': { color: '#e18c8c', weight: 2, fillColor: '#e18c8c', fillOpacity: 0.6 },
 
   // IGD - SALMON SOFT (240,150,150)
   igd: { color: '#f09696', weight: 2, fillColor: '#f09696', fillOpacity: 0.6 },
   'IGD': { color: '#f09696', weight: 2, fillColor: '#f09696', fillOpacity: 0.6 },
 
   // IGM - SOFT ORANGE (240,178,122)
-  igm: { color: '#f0b27a', weight: 2, fillColor: '#f0b27a', fillOpacity: 0.6 },
+  'IGM': { color: '#f0b27a', weight: 2, fillColor: '#f0b27a', fillOpacity: 0.6 },
 
   // R BERSALIN - BLUSH (244,170,185)
   bersalin: { color: '#f4aaab', weight: 2, fillColor: '#f4aaab', fillOpacity: 0.6 },
@@ -195,7 +190,7 @@ export const hospitalRoomStyles = {
   r_rekam_medik: { color: '#aab9c8', weight: 2, fillColor: '#aab9c8', fillOpacity: 0.5 },
   'R. rekam medik': { color: '#aab9c8', weight: 2, fillColor: '#aab9c8', fillOpacity: 0.5 },
   r_keunagan: { color: '#8296be', weight: 2, fillColor: '#8296be', fillOpacity: 0.5 },
-  'R. KEUNAGAN': { color: '#8296be', weight: 2, fillColor: '#8296be', fillOpacity: 0.5 },
+  'R. KEUANGAN': { color: '#8296be', weight: 2, fillColor: '#8296be', fillOpacity: 0.5 },
   keuangan: { color: '#8296be', weight: 2, fillColor: '#8296be', fillOpacity: 0.5 },
   stairs: { color: '#8b6b6b', weight: 2, fillColor: '#8b6b6b', fillOpacity: 0.6 },
   tangga: { color: '#8b6b6b', weight: 2, fillColor: '#8b6b6b', fillOpacity: 0.6 },
