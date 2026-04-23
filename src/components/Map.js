@@ -367,7 +367,7 @@ export default forwardRef(function Map({ selectedCategory, currentFloor = 'westp
 
       if (!fromRoom) {
         // Cari ruangan terdekat dari user position
-        console.log('ℹ️ No detected room, finding nearest room from user position...');
+        console.log('ℹ No detected room, finding nearest room from user position...');
         // Convert [lat, lng] ke [x, y] untuk perhitungan
         const userCoords = { x: userPosition.lng, y: userPosition.lat };
         let nearestRoom = null;
@@ -858,15 +858,18 @@ export default forwardRef(function Map({ selectedCategory, currentFloor = 'westp
             {/* Fit bounds ke area data (baik dari file terpisah maupun floor data) */}
             <FitBounds data={areaData} isLocal={useLocalCRS} />
 
-            {/* Layer 1.5 (TENGAH): Icon markers untuk setiap ruangan */}
+            {/* Layer 1.5 (TENGAH): Icon markers atau text labels untuk setiap ruangan */}
             {areaData.features && areaData.features.map((feature, idx) => {
               if (!feature.geometry || !feature.properties) return null;
 
               const roomName = feature.properties.RUANGAN || feature.properties.ruangan || feature.properties.name || '';
               if (!roomName) return null;
 
-              const iconPath = getIconForRoom(roomName);
-              if (!iconPath) return null;
+      
+              const ignoreRooms = ['PINTU', '0', 'DINDING'];
+              if (ignoreRooms.includes(roomName.toUpperCase().trim())) {
+                return null;  // Jangan tampilkan label untuk ruangan ini
+              }
 
               // Hitung centroid dari geometry
               let centroid = null;
@@ -894,28 +897,64 @@ export default forwardRef(function Map({ selectedCategory, currentFloor = 'westp
 
               if (!centroid) return null;
 
-              // Create custom div icon with image
-              const roomIcon = L.divIcon({
-                className: 'room-icon-marker',
-                html: `
-                  <div style="
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    width: 40px;
-                    height: 40px;
-                    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.25));
-                  ">
-                    <img src="${iconPath}" alt="${roomName}" style="width: 32px; height: 32px; object-fit: contain;" />
-                  </div>
-                `,
-                iconSize: [40, 40],
-                iconAnchor: [20, 20],
-                popupAnchor: [0, -20],
-              });
+              const iconPath = getIconForRoom(roomName);
+
+              // Buat marker dengan icon atau text label
+              let marker = null;
+              
+              if (iconPath) {
+                // Ada icon: tampilkan icon
+                const roomIcon = L.divIcon({
+                  className: 'room-icon-marker',
+                  html: `
+                    <div style="
+                      display: flex;
+                      align-items: center;
+                      justify-content: center;
+                      width: 40px;
+                      height: 40px;
+                      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.25));
+                    ">
+                      <img src="${iconPath}" alt="${roomName}" style="width: 32px; height: 32px; object-fit: contain;" />
+                    </div>
+                  `,
+                  iconSize: [40, 40],
+                  iconAnchor: [20, 20],
+                  popupAnchor: [0, -20],
+                });
+                marker = roomIcon;
+              } else {
+                // Tidak ada icon: tampilkan text label
+                const textIcon = L.divIcon({
+                  className: 'room-text-marker',
+                  html: `
+                    <div style="
+                      display: flex;
+                      align-items: center;
+                      justify-content: center;
+                      background: rgba(107, 114, 128, 0.9);
+                      color: white;
+                      padding: 4px 8px;
+                      border-radius: 4px;
+                      font-size: 11px;
+                      font-weight: bold;
+                      max-width: 60px;
+                      text-align: center;
+                      word-wrap: break-word;
+                      filter: drop-shadow(0 1px 2px rgba(0,0,0,0.3));
+                    ">
+                      ${roomName}
+                    </div>
+                  `,
+                  iconSize: [60, 30],
+                  iconAnchor: [30, 15],
+                  popupAnchor: [0, -15],
+                });
+                marker = textIcon;
+              }
 
               return (
-                <Marker key={`room-icon-${idx}`} position={centroid} icon={roomIcon}>
+                <Marker key={`room-marker-${idx}`} position={centroid} icon={marker}>
                   <Popup>
                     <div className="text-sm font-semibold">{roomName}</div>
                   </Popup>
