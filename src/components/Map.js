@@ -265,8 +265,6 @@ function isLocalCoordinateSystem(data) {
 
   const [x, y] = coords;
 
-  // Koordinat lokal biasanya > 360 atau < -180 (di luar range lat/lng yang valid)
-  // Latitude valid: -90 to 90, Longitude valid: -180 to 180
   return Math.abs(x) > 360 || Math.abs(y) > 180;
 }
 
@@ -274,18 +272,20 @@ function isLocalCoordinateSystem(data) {
 function getIconForRoom(roomName) {
   if (!roomName) return null;
 
-  const name = roomName.toLowerCase();
+  const name = roomName.toLowerCase().trim();
 
-  // Map nama ruangan ke icon
-  if (name.includes('igd') || name.includes('darurat') || name.includes('emergency')) return '/ruangan-icon/igd.png';
+  // Map nama ruangan ke icon - URUTAN PENTING! Spesifik dulu, baru general
+  if (name.includes('igd') && !name.includes('igm')) return '/ruangan-icon/igd.png';
+  // if (name.includes('igm') && name.includes('anak')) return '/ruangan-icon/igm_anak.png';
+  // if (name.includes('igm')) return '/ruangan-icon/igm.png';
   if (name.includes('toilet') || name.includes('wc')) return '/ruangan-icon/toilet.png';
   if (name.includes('mushola') || name.includes('musholla')) return '/ruangan-icon/mushola.png';
   if (name.includes('apotek') || name.includes('farmasi')) return '/ruangan-icon/apotek.png';
-  if (name.includes('kantin') || name.includes('cafeteria')) return '/ruangan-icon/kantin.png';
+  if (name.includes('kantin')) return '/ruangan-icon/kantin.png';
   if (name.includes('lab') || name.includes('laborat')) return '/ruangan-icon/lab.png';
-  if (name.includes('operasi') || name.includes('or')) return '/ruangan-icon/operasi.png';
+  if (name.includes('operasi') || name.includes(' or ') || name.includes(' or.')) return '/ruangan-icon/operasi.png';
   if (name.includes('fisioterapi') || name.includes('fisio')) return '/ruangan-icon/fisioterapi.png';
-  if (name.includes('rawat inap') || name.includes('inpatient')) return '/ruangan-icon/rawat_inap.png';
+  if (name.includes('rawat inap')) return '/ruangan-icon/rawat_inap.png';
   if (name.includes('perawatan') || name.includes('care')) return '/ruangan-icon/perawatan.png';
   if (name.includes('hcu') || name.includes('high care')) return '/ruangan-icon/hcu.png';
   if (name.includes('poli anak') || name.includes('pediatri')) return '/ruangan-icon/poli_anak.png';
@@ -295,7 +295,17 @@ function getIconForRoom(roomName) {
   if (name.includes('bersalin') || name.includes('delivery') || name.includes('maternity')) return '/ruangan-icon/bersalin.png';
   if (name.includes('menyusui') || name.includes('nursing')) return '/ruangan-icon/menyusui.png';
   if (name.includes('bank darah') || name.includes('blood bank')) return '/ruangan-icon/bank_darah.png';
+  if (name.includes('p. motor')) return '/ruangan-icon/parkir.png';
+  if (name.includes('lobby lift') || name.includes('lift') ) return '/ruangan-icon/lift.png';
+  if (name.includes('tangga')) return '/ruangan-icon/tangga.png';
+  if (name.includes('r. pisioterapi')) return '/ruangan-icon/fisioterapi.png';
+  if (name.includes('r. oprasi')) return '/ruangan-icon/operasi.png';
+  if (name.includes('igd anak')) return '/ruangan-icon/igd_anak.png';
 
+
+
+
+  
   return null;
 }
 
@@ -932,11 +942,11 @@ export default forwardRef(function Map({ selectedCategory, currentFloor = 'westp
                       display: flex;
                       align-items: center;
                       justify-content: center;
-                      background: rgba(107, 114, 128, 0.9);
+                      background: rgba(63, 64, 65, 0.5);
                       color: white;
-                      padding: 4px 8px;
+                      padding: 2px 6px;
                       border-radius: 4px;
-                      font-size: 11px;
+                      font-size: 0.5rem;
                       font-weight: bold;
                       max-width: 60px;
                       text-align: center;
