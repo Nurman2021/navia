@@ -187,12 +187,12 @@ export default function Home() {
   }, []);
 
   const floors = [
-    { id: 'lantai-1-area', name: 'Emergency & Penunjang Medis', label: 'L1' },
-    { id: 'lantai-2-area', name: 'Rawat Jalan dan Penunjang Klinis', label: 'L2' },
-    { id: 'lantai-3-area', name: 'Rawat Inap Pemulihan', label: 'L3' },
-    { id: 'lantai-4-area', name: 'Rawat Inap Lanjutan', label: 'L4' },
-    { id: 'lantai-5-area', name: 'Rawat Inap Lanjutan', label: 'L5' },
-    { id: 'lantai-6-area', name: 'Administrasi Dan K. Konstitusional', label: 'L6' },
+    { id: 'lantai-1-area', name: 'Emergency & Penunjang Medis', label: 'LANTAI 1' },
+    { id: 'lantai-2-area', name: 'Rawat Jalan dan Penunjang Klinis', label: 'LANTAI 2' },
+    { id: 'lantai-3-area', name: 'Rawat Inap Pemulihan', label: 'LANTAI 3' },
+    { id: 'lantai-4-area', name: 'Rawat Inap Lanjutan', label: 'LANTAI 4' },
+    { id: 'lantai-5-area', name: 'Rawat Inap Lanjutan', label: 'LANTAI 5' },
+    { id: 'lantai-6-area', name: 'Administrasi Dan K. Konstitusional', label: 'LANTAI 6' },
   ];
 
   const currentFloorData = floors.find(f => f.id === currentFloor);

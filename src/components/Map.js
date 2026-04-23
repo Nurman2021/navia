@@ -275,7 +275,7 @@ function getIconForRoom(roomName) {
   const name = roomName.toLowerCase().trim();
 
   // Map nama ruangan ke icon - URUTAN PENTING! Spesifik dulu, baru general
-  if (name.includes('igd') && !name.includes('igm')) return '/ruangan-icon/igd.png';
+  if (name.includes('igd') && !name.includes('anak')) return '/ruangan-icon/igd.png';
   // if (name.includes('igm') && name.includes('anak')) return '/ruangan-icon/igm_anak.png';
   // if (name.includes('igm')) return '/ruangan-icon/igm.png';
   if (name.includes('toilet') || name.includes('wc')) return '/ruangan-icon/toilet.png';
