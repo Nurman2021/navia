@@ -17,6 +17,8 @@ export default function SearchBar({ mapRef, onSearchSelect, floorData }) {
     if (floorData && floorData.features && Array.isArray(floorData.features)) {
       console.log('✅ SearchBar: Found features, count:', floorData.features.length);
 
+      const ignoreRooms = ['0', 'PINTU', 'DINDING'];
+
       const rooms = floorData.features
         .map((feature, idx) => {
           const ruangan = feature.properties?.RUANGAN || feature.properties?.ruangan || feature.properties?.name || '';
@@ -28,7 +30,18 @@ export default function SearchBar({ mapRef, onSearchSelect, floorData }) {
             geometry: feature.geometry,
           };
         })
-        .filter((room) => room.name && room.name.trim() !== ''); // Filter empty names
+        .filter((room) => {
+          // Filter 1: Hapus nama kosong
+          if (!room.name || room.name.trim() === '') return false;
+          
+          // Filter 2: Hapus ruangan yang diabaikan
+          if (ignoreRooms.includes(room.name.toUpperCase().trim())) {
+            console.log(`  ⏭️ Skipping ignored room: ${room.name}`);
+            return false;
+          }
+          
+          return true;
+        });
 
       console.log('✅ SearchBar: Rooms extracted successfully:', rooms.length, rooms.slice(0, 5)); // Debug log
       setAllRooms(rooms);
@@ -66,7 +79,6 @@ export default function SearchBar({ mapRef, onSearchSelect, floorData }) {
     setSearchText(room.name);
     setShowResults(false);
 
-    // Notify parent component untuk highlight area di peta
     if (onSearchSelect) {
       onSearchSelect({
         roomName: room.name,
