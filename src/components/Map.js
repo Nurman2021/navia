@@ -206,10 +206,10 @@ function UserLocationDetector({ areaData, isLocal, onLocationDetected }) {
           for (const ring of rings) {
             if (pointInPolygon(pointX, pointY, ring)) {
               detectedRoom = {
-                name: feature.properties.RUANGAN || feature.properties.name || 'Unknown',
-                type: feature.properties.type || 'unknown',
-                roomnumber: feature.properties.roomnumber || '-',
-                id: feature.properties.id,
+                name: feature.properties.RUANGAN || 'Unknown',
+                // type: feature.properties.type || 'unknown',
+                // roomnumber: feature.properties.roomnumber || '-',
+                // id: feature.properties.id,
               };
               break;
             }
@@ -1003,8 +1003,8 @@ export default forwardRef(function Map({ selectedCategory, currentFloor = 'westp
                 {detectedRoom ? (
                   <>
                     <strong>📍 {detectedRoom.name}</strong><br />
-                    <span>Type: {detectedRoom.type}</span><br />
-                    <span>Room: {detectedRoom.roomnumber}</span>
+                    {/* <span>Type: {detectedRoom.type}</span><br />
+                    <span>Room: {detectedRoom.roomnumber}</span> */}
                   </>
                 ) : (
                   <span>📍 Area tidak dikenali (koridor/luar ruangan)</span>

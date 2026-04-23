@@ -1,3 +1,2 @@
-next update
-1. category button = jika salah satu category untuk label ruangan di klik maka label lain hidden
-2. ketika area ruangan di klik maka tampilkan tombol untuk menavigasi, dan pertama ada opsi untuk mengscan di mana posisi saat ini
+1. ketika di klik zoom kearah ruangan
+2. ketika di cari sembunyikan ruangan lain
